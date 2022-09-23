@@ -4,6 +4,7 @@ import { Container, TransactionTypeContainer, RadioBox } from './styles';
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
+import { api } from '../../services/api';
 
 
 interface NewTransactionModalProps {
@@ -18,7 +19,16 @@ export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModa
     const [type, setType] = useState('deposit');
     
     function handleCreateNewTransaction(event: FormEvent) {
-        event.preventDefault();
+        event.preventDefault()
+
+        const data  = {
+            title,
+            value,
+            category,
+            type
+        }
+
+        api.post('/api/transactions', data)
     }
 
     return (
@@ -36,7 +46,7 @@ export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModa
                 <img src={closeImg} alt="Fechar modal" />
             </button>
         
-            <Container>
+            <Container onSubmit={handleCreateNewTransaction}>
                 <h2>Cadastrar Transação</h2>
 
                 <input 
@@ -79,7 +89,6 @@ export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModa
                 />
                 <button 
                     type="submit"
-                    onSubmit={handleCreateNewTransaction}
                 >
                     Cadastrar
                 </button>
